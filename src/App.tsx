@@ -1131,7 +1131,7 @@ export default function App() {
                     <label htmlFor="smoking" className="text-sm font-medium text-slate-700">I am a smoker</label>
                   </div>
 
-                  <div className="space-y-1.5">
+                  <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <label className="text-sm font-medium text-slate-700">Symptoms</label>
                       <motion.button 
@@ -1150,13 +1150,66 @@ export default function App() {
                         {isListening ? "Listening..." : "Speak Symptoms"}
                       </motion.button>
                     </div>
-                    <textarea 
-                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-pink-500/20 focus:border-pink-500 outline-none transition-all min-h-[100px]"
-                      placeholder="e.g., Fatigue, chest pain, headache..."
-                      value={formData.symptoms}
-                      onChange={e => setFormData({...formData, symptoms: e.target.value})}
-                    />
-                    <p className="text-[10px] text-slate-400 italic">Click "Speak Symptoms" to use voice input (Rural/Elderly accessible)</p>
+                    
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        "Fatigue", "Fever", "Cough", "Shortness of breath", 
+                        "Chest pain", "Headache", "Dizziness", "Nausea", 
+                        "Joint pain", "Muscle aches", "Sore throat", "Loss of taste/smell"
+                      ].map((symptom) => {
+                        const isSelected = formData.symptoms.split(', ').includes(symptom);
+                        return (
+                          <motion.button
+                            key={symptom}
+                            type="button"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => {
+                              const currentSymptoms = formData.symptoms ? formData.symptoms.split(', ') : [];
+                              let newSymptoms;
+                              if (isSelected) {
+                                newSymptoms = currentSymptoms.filter(s => s !== symptom);
+                              } else {
+                                newSymptoms = [...currentSymptoms, symptom];
+                              }
+                              setFormData({ ...formData, symptoms: newSymptoms.filter(Boolean).join(', ') });
+                            }}
+                            className={cn(
+                              "px-3 py-1.5 rounded-full text-xs font-bold transition-all border",
+                              isSelected 
+                                ? "bg-[#E91E63] text-white border-[#E91E63]" 
+                                : "bg-white text-slate-600 border-slate-200 hover:border-pink-300"
+                            )}
+                          >
+                            {symptom}
+                          </motion.button>
+                        );
+                      })}
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Other / Custom Symptoms</label>
+                      <input 
+                        className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-pink-500/20 focus:border-pink-500 outline-none transition-all text-sm"
+                        placeholder="Type any other symptoms..."
+                        value={formData.symptoms.split(', ').filter(s => ![
+                          "Fatigue", "Fever", "Cough", "Shortness of breath", 
+                          "Chest pain", "Headache", "Dizziness", "Nausea", 
+                          "Joint pain", "Muscle aches", "Sore throat", "Loss of taste/smell"
+                        ].includes(s)).join(', ')}
+                        onChange={e => {
+                          const predefined = [
+                            "Fatigue", "Fever", "Cough", "Shortness of breath", 
+                            "Chest pain", "Headache", "Dizziness", "Nausea", 
+                            "Joint pain", "Muscle aches", "Sore throat", "Loss of taste/smell"
+                          ];
+                          const currentPredefined = formData.symptoms.split(', ').filter(s => predefined.includes(s));
+                          const custom = e.target.value;
+                          setFormData({ ...formData, symptoms: [...currentPredefined, custom].filter(Boolean).join(', ') });
+                        }}
+                      />
+                    </div>
+                    <p className="text-[10px] text-slate-400 italic">Select from common options or use voice/type for custom symptoms.</p>
                   </div>
 
                   <Button 
