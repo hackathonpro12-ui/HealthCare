@@ -81,3 +81,48 @@ export async function predictHealthRisks(data: HealthData): Promise<PredictionRe
 
   return JSON.parse(response.text);
 }
+
+export interface DrugInfo {
+  name: string;
+  manufacturer: string;
+  dosage: string;
+  uses: string[];
+  sideEffects: string[];
+  warnings: string;
+}
+
+export async function identifyDrug(base64Image: string): Promise<DrugInfo> {
+  const model = "gemini-3-flash-preview";
+
+  const prompt = "Identify this medicine from the image. Provide the name, manufacturer, typical dosage, uses, side effects, and any major warnings. Return the response in JSON format.";
+
+  const response = await ai.models.generateContent({
+    model,
+    contents: [
+      {
+        inlineData: {
+          mimeType: "image/jpeg",
+          data: base64Image,
+        },
+      },
+      { text: prompt },
+    ],
+    config: {
+      responseMimeType: "application/json",
+      responseSchema: {
+        type: Type.OBJECT,
+        properties: {
+          name: { type: Type.STRING },
+          manufacturer: { type: Type.STRING },
+          dosage: { type: Type.STRING },
+          uses: { type: Type.ARRAY, items: { type: Type.STRING } },
+          sideEffects: { type: Type.ARRAY, items: { type: Type.STRING } },
+          warnings: { type: Type.STRING },
+        },
+        required: ["name", "manufacturer", "dosage", "uses", "sideEffects", "warnings"],
+      },
+    },
+  });
+
+  return JSON.parse(response.text);
+}
