@@ -1,0 +1,8 @@
+{
+  "name": "HealthGuard AI",
+  "description": "AI-powered healthcare monitoring and disease risk prediction system.",
+  "requestFramePermissions": [
+    "geolocation",
+    "microphone"
+  ]
+}
