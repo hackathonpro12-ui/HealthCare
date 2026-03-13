@@ -40,20 +40,6 @@ db.exec(`
   );
 `);
 
-const reviewCountResult = db.prepare('SELECT COUNT(*) as count FROM reviews').get();
-if (reviewCountResult && reviewCountResult.count === 0) {
-  const insert = db.prepare('INSERT INTO reviews (name, rating, comment) VALUES (@name, @rating, @comment)');
-  const insertMany = db.transaction((reviews) => {
-    for (const review of reviews) insert.run(review);
-  });
-
-  insertMany([
-    { name: 'John Doe', rating: 5, comment: 'This is a great app!' },
-    { name: 'Jane Smith', rating: 4, comment: 'I really like the new features.' },
-    { name: 'Peter Jones', rating: 5, comment: 'Wow, amazing!' },
-  ]);
-}
-
 async function startServer() {
   const app = express();
   const PORT = 3000;
