@@ -1,4 +1,4 @@
-import { 
+changeimport { 
   Activity, Heart, Droplets, Thermometer, 
   AlertTriangle, CheckCircle, Info, TrendingUp,
   ArrowRight, Plus, History, LayoutDashboard,
@@ -491,7 +491,26 @@ export default function App() {
   const [lang, setLang] = React.useState<'en' | 'hi' | 'gu'>('en');
   const t = translations[lang];
   const [records, setRecords] = React.useState<HealthRecord[]>([]);
-  const [reviews, setReviews] = React.useState<{id: number, name: string, rating: number, comment: string}[]>([]);
+  const [reviews, setReviews] = React.useState<{id: number, name: string, rating: number, comment: string}[]>([
+    {
+      "id": 1,
+      "name": "Rohan",
+      "rating": 5,
+      "comment": "This app is a lifesaver! The AI analysis is incredibly accurate and has helped me stay on top of my health."
+    },
+    {
+      "id": 2,
+      "name": "Priya",
+      "rating": 4,
+      "comment": "I love the personalized recommendations. It's like having a personal health assistant in your pocket."
+    },
+    {
+      "id": 3,
+      "name": "Amit",
+      "rating": 5,
+      "comment": "The drug detection feature is amazing. It correctly identified my medication and provided useful information."
+    }
+  ]);
   const [loading, setLoading] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
   const [isListening, setIsListening] = React.useState(false);
