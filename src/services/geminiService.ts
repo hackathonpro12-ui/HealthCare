@@ -126,3 +126,66 @@ export async function identifyDrug(base64Image: string): Promise<DrugInfo> {
 
   return JSON.parse(response.text);
 }
+
+export interface TreatmentRecommendation {
+  treatmentName: string;
+  successProbability: number;
+  reasoning: string;
+}
+
+export interface PersonalizedTreatmentPlan {
+  recommendations: TreatmentRecommendation[];
+  patientAnalysis: string;
+}
+
+export async function getPersonalizedTreatments(data: HealthData): Promise<PersonalizedTreatmentPlan> {
+  const model = "gemini-3-flash-preview";
+
+  const prompt = `
+    Based on the following patient data, provide a personalized treatment recommendation system.
+    Suggest at least 3 potential treatments or lifestyle interventions.
+    For each treatment, estimate a success probability (0-100) based on the patient's specific profile.
+    Provide a brief reasoning for each recommendation and a general patient analysis.
+
+    Patient Data:
+    - Age: ${data.age}
+    - Gender: ${data.gender}
+    - BMI: ${(data.weight / ((data.height / 100) ** 2)).toFixed(1)}
+    - Blood Pressure: ${data.bloodPressureSystolic}/${data.bloodPressureDiastolic} mmHg
+    - Blood Sugar: ${data.bloodSugar} mg/dL
+    - Heart Rate: ${data.heartRate} bpm
+    - Lifestyle: ${data.sleepHours}h sleep, Smoking: ${data.isSmoking ? 'Yes' : 'No'}, Exercise: ${data.exerciseFrequency}
+    - Symptoms: ${data.symptoms || 'None'}
+
+    Return the response in JSON format.
+  `;
+
+  const response = await ai.models.generateContent({
+    model,
+    contents: prompt,
+    config: {
+      responseMimeType: "application/json",
+      responseSchema: {
+        type: Type.OBJECT,
+        properties: {
+          patientAnalysis: { type: Type.STRING },
+          recommendations: {
+            type: Type.ARRAY,
+            items: {
+              type: Type.OBJECT,
+              properties: {
+                treatmentName: { type: Type.STRING },
+                successProbability: { type: Type.NUMBER },
+                reasoning: { type: Type.STRING }
+              },
+              required: ["treatmentName", "successProbability", "reasoning"]
+            }
+          }
+        },
+        required: ["patientAnalysis", "recommendations"]
+      }
+    }
+  });
+
+  return JSON.parse(response.text);
+}
