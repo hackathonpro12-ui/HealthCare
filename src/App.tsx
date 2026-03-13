@@ -197,7 +197,7 @@ const translations = {
     drugDetectionTitle: "AI दवा पहचान",
     drugDetectionDesc: "AI विजन का उपयोग करके दवाओं की तुरंत पहचान करें",
     uploadMedicine: "दवा का फोटो अपलोड करें",
-    clickOrDrag: "अपલોડ करने के लिए क्लिक करें या खींचें",
+    clickOrDrag: "अपलोड करने के लिए क्लिक करें या खींचें",
     supportsJpg: "JPG, PNG का समर्थन करता है (अधिकतम 5MB)",
     identifyMedicine: "दवा की पहचान करें",
     analyzingMedicine: "दवा का विश्लेषण कर रहा है...",
@@ -491,26 +491,7 @@ export default function App() {
   const [lang, setLang] = React.useState<'en' | 'hi' | 'gu'>('en');
   const t = translations[lang];
   const [records, setRecords] = React.useState<HealthRecord[]>([]);
-  const [reviews, setReviews] = React.useState<{id: number, name: string, rating: number, comment: string}[]>([
-    {
-      "id": 1,
-      "name": "Rohan",
-      "rating": 5,
-      "comment": "This app is a lifesaver! The AI analysis is incredibly accurate and has helped me stay on top of my health."
-    },
-    {
-      "id": 2,
-      "name": "Priya",
-      "rating": 4,
-      "comment": "I love the personalized recommendations. It's like having a personal health assistant in your pocket."
-    },
-    {
-      "id": 3,
-      "name": "Amit",
-      "rating": 5,
-      "comment": "The drug detection feature is amazing. It correctly identified my medication and provided useful information."
-    }
-  ]);
+  const [reviews, setReviews] = React.useState<{id: number, name: string, rating: number, comment: string}[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
   const [isListening, setIsListening] = React.useState(false);
