@@ -509,18 +509,6 @@ export default function App() {
       "name": "Amit",
       "rating": 5,
       "comment": "The drug detection feature is amazing. It correctly identified my medication and provided useful information."
-    },
-    {
-      "id": 4,
-      "name": "Sneha",
-      "rating": 4,
-      "comment": "The UI is so clean and easy to use. Tracking my health has never been simpler."
-    },
-    {
-      "id": 5,
-      "name": "Vijay",
-      "rating": 5,
-      "comment": "I was skeptical at first, but the AI health report was spot on. Highly recommended!"
     }
   ]);
   const [loading, setLoading] = React.useState(false);
